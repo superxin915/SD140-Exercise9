@@ -11,6 +11,7 @@ const map = new mapboxgl.Map({
 let latitude;
 let longitude;
 let marker;
+let popup;
 
 searchForm.addEventListener(`submit`, event => {
   const inputArea = document.querySelector(`input`);
@@ -27,9 +28,14 @@ searchResultArea.addEventListener(`click`, event => {
   const selectedResult = event.target.closest(`.poi`);
   const longitude = +selectedResult.dataset.long;
   const latitude = +selectedResult.dataset.lat;
+  const resultName = selectedResult.querySelector(`.name`);
 
   if (marker !== undefined) {
     marker.remove();
+  }
+
+  if (popup !== undefined) {
+    popup.remove();
   }
 
   map.flyTo({
@@ -39,6 +45,11 @@ searchResultArea.addEventListener(`click`, event => {
 
   marker = new mapboxgl.Marker()
     .setLngLat([longitude, latitude])
+    .addTo(map);
+
+  popup = new mapboxgl.Popup({ offset: { 'bottom': [0, -40] }, closeButton: false })
+    .setLngLat([longitude, latitude])
+    .setHTML(`<div>${resultName.innerText}</div>`)
     .addTo(map);
 })
 
