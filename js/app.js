@@ -10,6 +10,7 @@ const map = new mapboxgl.Map({
 
 let latitude;
 let longitude;
+let marker;
 
 searchForm.addEventListener(`submit`, event => {
   const inputArea = document.querySelector(`input`);
@@ -23,10 +24,22 @@ searchForm.addEventListener(`submit`, event => {
 })
 
 searchResultArea.addEventListener(`click`, event => {
-  // if (event.target.closest(`.poi`).className === `poi`) {
-  //   console.log()
-  // }
-  console.log(event.target.closest(`.poi`));
+  const selectedResult = event.target.closest(`.poi`);
+  const longitude = +selectedResult.dataset.long;
+  const latitude = +selectedResult.dataset.lat;
+
+  if (marker !== undefined) {
+    marker.remove();
+  }
+
+  map.flyTo({
+    center: [longitude, latitude],
+    essential: true
+  });
+
+  marker = new mapboxgl.Marker()
+    .setLngLat([longitude, latitude])
+    .addTo(map);
 })
 
 map.on('load', function() {
