@@ -2,6 +2,7 @@ mapboxgl.accessToken = `pk.eyJ1Ijoic3VwZXJ4aW4iLCJhIjoiY2thNWlqZHd4MDBpODNnb3owM
 
 const geoLocate = new mapboxgl.GeolocateControl();
 const searchForm = document.querySelector(`form`);
+const searchResultArea = document.querySelector(`.points-of-interest`);
 const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/streets-v9'
@@ -19,6 +20,13 @@ searchForm.addEventListener(`submit`, event => {
 
   inputArea.value = ``;
   event.preventDefault();
+})
+
+searchResultArea.addEventListener(`click`, event => {
+  // if (event.target.closest(`.poi`).className === `poi`) {
+  //   console.log()
+  // }
+  console.log(event.target.closest(`.poi`));
 })
 
 map.on('load', function() {
@@ -47,7 +55,6 @@ function searchPlaces(keyword) {
 }
 
 function updateSearchResults(list) {
-  const searchResultArea = document.querySelector(`.points-of-interest`);
   let html = ``;
 
   list.forEach(location => {

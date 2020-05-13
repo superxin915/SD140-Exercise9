@@ -4,16 +4,16 @@ const htmlmin = require(`gulp-htmlmin`);
 const minify = require(`gulp-minify`);
 
 exports.default = cb => {
-  gulp.src(`src/css/*.css`)
+  gulp.src(`css/*.css`)
     .pipe(cleanCSS())
     .pipe(gulp.dest(`dest/css`));
 
-  gulp.src(`src/*.html`)
+  gulp.src(`*.html`)
     .pipe(htmlmin({ collapseWhitespace: true }))
     .pipe(gulp.dest('dest'));
 
   gulp.task(`compress`, () => {
-    gulp.src(`src/js/*.js`)
+    gulp.src(`js/*.js`)
       .pipe(minify())
       .pipe(gulp.dest('dest/js'));
   })
