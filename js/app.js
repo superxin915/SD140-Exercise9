@@ -26,8 +26,8 @@ searchForm.addEventListener(`submit`, event => {
 
 searchResultArea.addEventListener(`click`, event => {
   const selectedResult = event.target.closest(`.poi`);
-  const longitude = +selectedResult.dataset.long;
-  const latitude = +selectedResult.dataset.lat;
+  const long = +selectedResult.dataset.long;
+  const lat = +selectedResult.dataset.lat;
   const resultName = selectedResult.querySelector(`.name`);
 
   if (marker !== undefined) {
@@ -39,25 +39,25 @@ searchResultArea.addEventListener(`click`, event => {
   }
 
   map.flyTo({
-    center: [longitude, latitude],
+    center: [long, lat],
     essential: true
   });
 
   marker = new mapboxgl.Marker()
-    .setLngLat([longitude, latitude])
+    .setLngLat([long, lat])
     .addTo(map);
 
   popup = new mapboxgl.Popup({ offset: { 'bottom': [0, -40] }, closeButton: false })
-    .setLngLat([longitude, latitude])
+    .setLngLat([long, lat])
     .setHTML(`<div>${resultName.innerText}</div>`)
     .addTo(map);
 })
 
-map.on('load', function() {
+map.addControl(geoLocate);
+
+map.on('load', () => {
   geoLocate.trigger();
 });
-
-map.addControl(geoLocate);
 
 geoLocate.on(`geolocate`, event => {
   latitude = event.coords.latitude;
