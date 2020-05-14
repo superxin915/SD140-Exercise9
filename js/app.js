@@ -79,13 +79,18 @@ function updateSearchResults(list) {
   let html = ``;
 
   list.forEach(location => {
-    const distance = calculateDistance(longitude, latitude, location.center[0], location.center[1]);
+    location.distance = calculateDistance(longitude, latitude, location.center[0], location.center[1]);
+  })
+
+  list = list.sort((a, b) => a.distance - b.distance);
+
+  list.forEach(location => {
     html += `
       <li class="poi" data-long="${location.center[0]}" data-lat="${location.center[1]}">
         <ul>
           <li class="name">${location.text}</li>
           <li class="street-address">${location.properties.address}</li>
-          <li class="distance">${distance} km</li>
+          <li class="distance">${location.distance} km</li>
         </ul>
       </li>
     `;
