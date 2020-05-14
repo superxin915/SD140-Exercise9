@@ -3,10 +3,7 @@ mapboxgl.accessToken = `pk.eyJ1Ijoic3VwZXJ4aW4iLCJhIjoiY2thNWlqZHd4MDBpODNnb3owM
 const geoLocate = new mapboxgl.GeolocateControl();
 const searchForm = document.querySelector(`form`);
 const searchResultArea = document.querySelector(`.points-of-interest`);
-const map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/mapbox/streets-v9'
-});
+const map = new mapboxgl.Map({ container: 'map', style: 'mapbox://styles/mapbox/streets-v9' });
 
 let latitude;
 let longitude;
@@ -65,7 +62,7 @@ geoLocate.on(`geolocate`, event => {
 })
 
 function searchPlaces(keyword) {
-  fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${keyword}.json?access_token=${mapboxgl.accessToken}&proximity=${longitude},${latitude}&types=poi&limit=10`)
+  fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${keyword}.json?proximity=${longitude},${latitude}&types=poi&limit=10&access_token=${mapboxgl.accessToken}`)
     .then(response => {
       if (response.ok) {
         return response.json();
@@ -98,5 +95,13 @@ function updateSearchResults(list) {
 }
 
 function calculateDistance(longitude1, latitude1, longitude2, latitude2) {
-  return (Math.sqrt(Math.pow((longitude1 - longitude2), 2) + Math.pow((latitude1 - latitude2), 2)) * 100).toFixed(1);
+  const R = 6371e3;
+  const φ1 = latitude1 * Math.PI / 180;
+  const φ2 = latitude2 * Math.PI / 180;
+  const Δφ = (latitude2 - latitude1) * Math.PI / 180;
+  const Δλ = (longitude2 - longitude1) * Math.PI / 180;
+  const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const d = (R * c) / 1000;
+  return d.toFixed(1);
 }
