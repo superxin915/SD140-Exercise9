@@ -10,13 +10,11 @@ exports.default = cb => {
 
   gulp.src(`*.html`)
     .pipe(htmlmin({ collapseWhitespace: true }))
-    .pipe(gulp.dest('dest'));
+    .pipe(gulp.dest(`dest`));
 
-  gulp.task(`compress`, () => {
-    gulp.src(`js/*.js`)
-      .pipe(minify())
-      .pipe(gulp.dest('dest/js'));
-  })
+  gulp.src(`js/*.js`)
+    .pipe(minify())
+    .pipe(gulp.dest(`dest/js`));
 
   cb();
 }
