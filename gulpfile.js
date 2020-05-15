@@ -19,7 +19,7 @@ function compressHTML(cb) {
 
 function compressJS(cb) {
   gulp.src(`js/*.js`)
-    .pipe(minify())
+    .pipe(minify({ ext: { min: `.js` }, noSource: true }))
     .pipe(gulp.dest(`dest/js`));
   cb();
 }

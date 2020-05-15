@@ -40,14 +40,14 @@ searchResultArea.addEventListener(`click`, event => {
     essential: true
   });
 
+  popup = new mapboxgl.Popup({ closeButton: false })
+    .setHTML(`<div>${resultName.innerText}</div>`)
+
   marker = new mapboxgl.Marker()
     .setLngLat([long, lat])
-    .addTo(map);
-
-  popup = new mapboxgl.Popup({ offset: { 'bottom': [0, -40] }, closeButton: false })
-    .setLngLat([long, lat])
-    .setHTML(`<div>${resultName.innerText}</div>`)
-    .addTo(map);
+    .setPopup(popup)
+    .addTo(map)
+    .togglePopup();
 })
 
 map.addControl(geoLocate);
@@ -82,7 +82,7 @@ function updateSearchResults(list) {
     location.distance = calculateDistance(longitude, latitude, location.center[0], location.center[1]);
   })
 
-  list = list.sort((a, b) => a.distance - b.distance);
+  list.sort((a, b) => a.distance - b.distance);
 
   list.forEach(location => {
     html += `
